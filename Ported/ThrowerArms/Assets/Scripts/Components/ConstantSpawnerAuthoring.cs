@@ -12,7 +12,8 @@ public class ConstantSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntit
     public GameObject DeathPlane;
     public float Speed;
     public int TargetCount;
-
+    public float3 MinScale;
+    public float3 MaxScale;
     
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
@@ -24,7 +25,9 @@ public class ConstantSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntit
             MaxArea = bounds.max,
             InitialVelocity = new float3(Speed, 0.0f, 0.0f),
             Prefab = conversionSystem.GetPrimaryEntity(Prefab),
-            TargetCount = TargetCount
+            TargetCount = TargetCount,
+            MinScale = MinScale,
+            MaxScale = MaxScale
         });
     }
     
