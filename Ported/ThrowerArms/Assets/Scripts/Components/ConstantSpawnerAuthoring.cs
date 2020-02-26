@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -9,6 +10,7 @@ public class ConstantSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntit
     public GameObject Prefab;
     public GameObject SpawnArea;
     public GameObject DeathPlane;
+    public float Speed;
 
     
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
@@ -19,6 +21,7 @@ public class ConstantSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntit
         {
             MinArea = bounds.min,
             MaxArea = bounds.max,
+            InitialVelocity = new float3(Speed, 0.0f, 0.0f),
             Prefab = conversionSystem.GetPrimaryEntity(Prefab)
         });
     }

@@ -25,6 +25,7 @@ public class SpawnConstantlySystem : SystemBase
             var randomPosition = random.NextFloat3(spawner.MinArea, spawner.MaxArea);
             var newEntity = ecb.Instantiate(entityInQueryIndex, spawner.Prefab);
             ecb.SetComponent(entityInQueryIndex, newEntity, new Translation { Value = randomPosition });
+            ecb.AddComponent(entityInQueryIndex, newEntity, new Velocity { Value = spawner.InitialVelocity });
         }).ScheduleParallel();
 
         m_EntityCommandBufferSystem.AddJobHandleForProducer(Dependency);
