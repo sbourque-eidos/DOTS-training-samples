@@ -29,7 +29,8 @@ public class SpawnConstantlySystem : SystemBase
             for (int i = 0; i < amountToSpawn; ++i)
             {
                 var randomPosition = random.NextFloat3(spawner.MinArea, spawner.MaxArea);
-                var randomScale = random.NextFloat3(spawner.MinScale, spawner.MaxScale);
+                var randomScalePercent = random.NextFloat(0,1);
+                float3 randomScale = spawner.MinScale + randomScalePercent * (spawner.MaxScale - spawner.MinScale);
                 var newEntity = ecb.Instantiate(entityInQueryIndex, spawner.Prefab);
                 ecb.SetComponent(entityInQueryIndex, newEntity, new Translation { Value = randomPosition });
                 ecb.AddComponent(entityInQueryIndex, newEntity, new Velocity { Value = spawner.InitialVelocity });
@@ -38,8 +39,12 @@ public class SpawnConstantlySystem : SystemBase
                     , new IncreaseScaleData
                     {
                         Speed = k_IncreaseSpeed,
-                        TargetScale = randomScale.x,
+                        TargetScale = randomScale,
                     });
+                ecb.AddComponent(entityInQueryIndex, newEntity, new KillableData
+                {
+                    TargetKillPlane = spawner.DeathPlane
+                });
             }
 
         }).ScheduleParallel();

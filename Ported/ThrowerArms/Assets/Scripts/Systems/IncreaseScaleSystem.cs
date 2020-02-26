@@ -31,13 +31,13 @@ public class IncreaseScaleSystem : SystemBase
                 float newPercentageReached = increaseScaleData.PercentReached + (increaseScaleData.Speed * dt);
                 newPercentageReached = math.clamp(newPercentageReached, 0, 1);
 
-                float newScale = newPercentageReached * increaseScaleData.TargetScale;
+                float3 newScale = (float3)newPercentageReached * increaseScaleData.TargetScale;
 
                 //update scale values
                 nonUniformScale.Value = newScale;
                 increaseScaleData.PercentReached = newPercentageReached;
 
-                if(newScale == increaseScaleData.TargetScale)
+                if(all(newScale == increaseScaleData.TargetScale))
                 {
                     //remove component
                     ecb.RemoveComponent<IncreaseScaleData>(entityInQueryIndex, e);
