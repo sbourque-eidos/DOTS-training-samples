@@ -9,6 +9,6 @@ public class CameraZoomSystem : SystemBase
         Entities.ForEach((ref CameraZoomData zoom) =>
         {
             zoom.Zoom = CameraUtils.ComputePeriodicValue(time, zoom.Amplitude, zoom.Period, zoom.Phase);
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }

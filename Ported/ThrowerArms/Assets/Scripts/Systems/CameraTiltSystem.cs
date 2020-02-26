@@ -9,6 +9,6 @@ public class CameraTiltSystem : SystemBase
         Entities.ForEach((ref CameraTiltData tilt) =>
         {
             tilt.TiltAngle = CameraUtils.ComputePeriodicValue(time, tilt.Amplitude, tilt.Period, tilt.Phase);
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }

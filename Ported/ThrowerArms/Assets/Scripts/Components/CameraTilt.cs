@@ -10,7 +10,7 @@ public class CameraTilt : MonoBehaviour, IConvertGameObjectToEntity
     float m_Period = 35.0f;
 
     [SerializeField]
-    float m_Phase;
+    float m_Phase = 0.0f;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {

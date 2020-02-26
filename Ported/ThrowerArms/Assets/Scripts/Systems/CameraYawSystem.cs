@@ -9,6 +9,6 @@ public class CameraYawSystem : SystemBase
         Entities.ForEach((ref CameraYawData yaw) =>
         {
             yaw.YawAngle = CameraUtils.ComputePeriodicValue(time, yaw.Amplitude, yaw.Period, yaw.Phase);
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }

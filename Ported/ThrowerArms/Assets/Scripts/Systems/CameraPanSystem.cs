@@ -9,6 +9,6 @@ public class CameraPanSystem : SystemBase
         Entities.ForEach((ref CameraPanData pan) =>
         {
             pan.PanOffset = CameraUtils.ComputePeriodicValue(time, pan.Amplitude, pan.Period, pan.Phase);
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }
