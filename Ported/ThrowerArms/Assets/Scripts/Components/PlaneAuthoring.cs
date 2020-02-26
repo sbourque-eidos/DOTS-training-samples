@@ -9,7 +9,7 @@ public class PlaneAuthoring : MonoBehaviour, IConvertGameObjectToEntity
         float3 normal = transform.up.normalized;
         float3 pos = transform.position;
 
-        float distance = -normal.x * pos.x - normal.y * pos.y - normal.z * pos.z;
+        float distance = math.dot(normal, pos);
 
         dstManager.AddComponentData(entity, new Plane
         {

@@ -37,7 +37,7 @@ public static class CollisionManager
     {
         float sphereDistanceToCenter = math.dot(spherePosition, planeDirection);
         float sphereDistanceToPlane = sphereDistanceToCenter - planeDistance;
-        return sphereDistanceToPlane > sphereRadius;
+        return sphereDistanceToPlane < sphereRadius;
     }
 
     public static bool CollideCylinderPlane(
