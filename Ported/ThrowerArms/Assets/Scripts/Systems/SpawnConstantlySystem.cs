@@ -40,6 +40,10 @@ public class SpawnConstantlySystem : SystemBase
                         Speed = k_IncreaseSpeed,
                         TargetScale = randomScale.x,
                     });
+                ecb.AddComponent(entityInQueryIndex, newEntity, new KillableData
+                {
+                    TargetKillPlane = spawner.DeathPlane
+                });
             }
 
         }).ScheduleParallel();
