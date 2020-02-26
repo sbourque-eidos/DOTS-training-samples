@@ -6,22 +6,6 @@ using Unity.Jobs;
 using Unity.Transforms;
 using Unity.Mathematics;
 
-public struct Sphere : IComponentData
-{
-    public float Radius;
-}
-
-public struct Cylinder : IComponentData
-{
-    public float Length;
-    public float Radius;
-}
-
-public struct Target : IComponentData
-{
-    public Entity Value;
-}
-
 [BurstCompile]
 struct DetectCollisionJob : IJobForEachWithEntity<Sphere, Translation, Target>
 {
