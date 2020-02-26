@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
-using Unity.Mathematics;
 
+[UpdateBefore(typeof(ApplyCameraTransformation))]
 public class CameraZoomSystem : SystemBase
 {
     protected override void OnUpdate()
@@ -8,8 +8,7 @@ public class CameraZoomSystem : SystemBase
         double time = Time.ElapsedTime;
         Entities.ForEach((ref CameraZoomData zoom) =>
         {
-            float angularFrequency = (2.0f * math.PI) / zoom.Period;
-            zoom.Zoom = zoom.Amplitude * (float)math.sin((angularFrequency * time) + zoom.Phase);
+            zoom.Zoom = CameraUtils.ComputePeriodicValue(time, zoom.Amplitude, zoom.Period, zoom.Phase);
         }).Schedule();
     }
 }

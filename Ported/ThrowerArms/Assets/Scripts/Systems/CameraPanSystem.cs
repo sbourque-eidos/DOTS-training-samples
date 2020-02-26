@@ -1,5 +1,4 @@
 ﻿using Unity.Entities;
-using Unity.Mathematics;
 
 [UpdateBefore(typeof(ApplyCameraTransformation))]
 public class CameraPanSystem : SystemBase
@@ -9,8 +8,7 @@ public class CameraPanSystem : SystemBase
         double time = Time.ElapsedTime;
         Entities.ForEach((ref CameraPanData pan) =>
         {
-            float angularFrequency = (2.0f * math.PI) / pan.Period;
-            pan.PanOffset = pan.Amplitude * (float)math.sin((angularFrequency * time) + pan.Phase);
+            pan.PanOffset = CameraUtils.ComputePeriodicValue(time, pan.Amplitude, pan.Period, pan.Phase);
         }).Schedule();
     }
 }
