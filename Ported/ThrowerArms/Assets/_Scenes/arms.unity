@@ -787,6 +787,7 @@ GameObject:
   - component: {fileID: 1559498126}
   - component: {fileID: 1559498125}
   - component: {fileID: 1559498124}
+  - component: {fileID: 1559498127}
   m_Layer: 0
   m_Name: BallConveyor
   m_TagString: Untagged
@@ -810,6 +811,7 @@ MonoBehaviour:
   SpawnArea: {fileID: 1389865690}
   DeathPlane: {fileID: 384891758}
   Speed: 1
+  TargetCount: 300
 --- !u!114 &1559498125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -839,6 +841,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1559498127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559498123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 560ce0c9d11a14d67bd37dad9b3c1a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1865057438
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,6 +864,7 @@ GameObject:
   - component: {fileID: 1865057441}
   - component: {fileID: 1865057440}
   - component: {fileID: 1865057439}
+  - component: {fileID: 1865057442}
   m_Layer: 0
   m_Name: CanConveyor
   m_TagString: Untagged
@@ -873,6 +888,7 @@ MonoBehaviour:
   SpawnArea: {fileID: 1901327738}
   DeathPlane: {fileID: 894746156}
   Speed: -1
+  TargetCount: 200
 --- !u!114 &1865057440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -902,6 +918,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1865057442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865057438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9d1b6e647c942cbbfa0059d8dea1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1880168019
 GameObject:
   m_ObjectHideFlags: 0

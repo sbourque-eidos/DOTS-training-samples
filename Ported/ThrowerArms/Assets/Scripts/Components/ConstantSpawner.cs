@@ -8,4 +8,5 @@ public struct ConstantSpawner : IComponentData
     public float3 MaxArea;
     public float3 InitialVelocity;
     public Entity Prefab;
+    public int TargetCount;
 }
