@@ -52,6 +52,7 @@ public class ProcessCollisionSystem : JobComponentSystem
             Velocities = velocities
         };
 
-        return job.Schedule(inputDependencies);
+        JobHandle handle = JobHandle.CombineDependencies(inputDependencies, DetectCollisionSystem.Handle);
+        return job.Schedule(handle);
     }
 }

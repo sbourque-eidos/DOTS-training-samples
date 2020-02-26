@@ -7,19 +7,20 @@ using Unity.Transforms;
 using Unity.Mathematics;
 
 [BurstCompile]
-struct DetectCollisionJob : IJobForEachWithEntity<Sphere, Translation, Target>
+struct DetectCollisionJob : IJobForEachWithEntity<Sphere, Target>
 {
     [WriteOnly] public NativeQueue<ContactPoint>.ParallelWriter Contacts;
     [ReadOnly] public ComponentDataFromEntity<Cylinder> Cylinders;
     [ReadOnly] public ComponentDataFromEntity<Translation> Positions;
     [ReadOnly] public ComponentDataFromEntity<Rotation> Rotations;
 
-    public void Execute(Entity entity, int _, ref Sphere sphere, ref Translation spherePosition, [ReadOnly] ref Target target)
+    public void Execute(Entity entity, int _, ref Sphere sphere, [ReadOnly] ref Target target)
     {
         Entity targetEntity = target.Value;
 
         Cylinder   cylinder         = Cylinders[targetEntity];
         float3     cylinderPosition = Positions[targetEntity].Value;
+        float3     spherePosition   = Positions[entity].Value;
         quaternion cylinderRotation = Rotations[targetEntity].Value;
 
         if (CollisionManager.CollideSphereCylinder(
@@ -27,7 +28,7 @@ struct DetectCollisionJob : IJobForEachWithEntity<Sphere, Translation, Target>
             cylinderPosition,
             cylinder.Length,
             cylinder.Radius,
-            spherePosition.Value,
+            spherePosition,
             sphere.Radius))
         {
             var contact = new ContactPoint
@@ -44,6 +45,7 @@ struct DetectCollisionJob : IJobForEachWithEntity<Sphere, Translation, Target>
 public class DetectCollisionSystem : JobComponentSystem
 {
     public static NativeQueue<ContactPoint> Contacts;
+    public static JobHandle Handle;
 
     protected override void OnCreate()
     {
@@ -68,7 +70,8 @@ public class DetectCollisionSystem : JobComponentSystem
             Rotations = rotations,
             Contacts = Contacts.AsParallelWriter()
         };
-    
-        return job.Schedule(this, inputDependencies);
+
+        Handle = job.Schedule(this, inputDependencies);
+        return Handle;
     }
 }
