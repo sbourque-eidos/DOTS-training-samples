@@ -8,12 +8,6 @@ public struct ContactPoint : IComponentData
     public Entity EntityB;
 }
 
-public struct Plane : IComponentData
-{
-    public float3 Direction;
-    public float Distance;
-}
-
 public static class CollisionManager
 {
     public static void SegmentToPoints(quaternion rotation, float3 center, float length, out float3 A, out float3 B)

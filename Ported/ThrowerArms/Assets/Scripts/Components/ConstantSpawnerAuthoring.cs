@@ -25,6 +25,7 @@ public class ConstantSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntit
             MaxArea = bounds.max,
             InitialVelocity = new float3(Speed, 0.0f, 0.0f),
             Prefab = conversionSystem.GetPrimaryEntity(Prefab),
+            DeathPlane = conversionSystem.GetPrimaryEntity(DeathPlane),
             TargetCount = TargetCount,
             MinScale = MinScale,
             MaxScale = MaxScale
