@@ -15,6 +15,7 @@ public struct ApplyVelocityJob : IJobForEach<Translation, Velocity>
     }
 }
 
+[UpdateAfter(typeof(ApplyGravitySystem))]
 public class ApplyVelocitySystem : JobComponentSystem
 {
     protected override JobHandle OnUpdate(JobHandle inputDeps)
