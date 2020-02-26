@@ -24,14 +24,13 @@ public class KillableSystem : SystemBase
             Entity killPlaneEntity = killableData.TargetKillPlane;
             if (planeData.Exists(killPlaneEntity))
             {
-                UnityEngine.Debug.Log("PING");
                 Plane killPlane = planeData[killPlaneEntity];
                 if (CollisionManager.CollideSpherePlane(transform.Position, 1.0f, killPlane.Direction, killPlane.Distance))
                 {
                     sphereEcb.DestroyEntity(entityInQueryIndex, entity);
                 }
             }
-        }).WithAll<BallTag>().WithReadOnly(planeData).WithoutBurst().ScheduleParallel(Dependency);
+        }).WithAll<BallTag>().WithReadOnly(planeData).ScheduleParallel(Dependency);
 
         var cylinderHandle = Entities.ForEach((Entity entity, int entityInQueryIndex, in KillableData killableData,
             in LocalToWorld transform) =>
