@@ -20,7 +20,7 @@ public class SpawnConstantlySystem : SystemBase
         var ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent();
         var baseSeed = (uint)UnityEngine.Time.frameCount;
 
-        Entities.ForEach((Entity entity, int entityInQueryIndex, ref ConstantSpawner spawner, in CurrentCount currentCount) =>
+        Entities.ForEach((Entity entity, int entityInQueryIndex, in ConstantSpawner spawner, in CurrentCount currentCount) =>
         {
             var random = new Random(baseSeed + (uint)entityInQueryIndex);
             random.NextFloat(); // For "real" random because the seed is used directly otherwise
