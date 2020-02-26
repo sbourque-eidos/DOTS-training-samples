@@ -5,7 +5,7 @@ using Unity.Transforms;
 using Unity.Burst;
 
 [BurstCompile]
-public class ApplyVelocityJob : IJobForEach<Translation, Velocity>
+public struct ApplyVelocityJob : IJobForEach<Translation, Velocity>
 {
     public float DeltaTime;
 
@@ -24,7 +24,7 @@ public class ApplyVelocitySystem : JobComponentSystem
             DeltaTime = Time.DeltaTime
         };
 
-        JobHandle handle = applyVelocityJob.Schedule(inputDeps);
+        JobHandle handle = applyVelocityJob.Schedule(this, inputDeps);
         return handle;
     }
 }
