@@ -6,6 +6,7 @@ public struct ContactPoint : IComponentData
 {
     public Entity EntityA;
     public Entity EntityB;
+    public float3 Position;
 }
 
 public static class CollisionManager

@@ -31,10 +31,13 @@ struct DetectCollisionJob : IJobForEachWithEntity<Sphere, Target>
             spherePosition,
             sphere.Radius))
         {
+            float3 hitPosition = 0.5f * (cylinderPosition + spherePosition);
+
             var contact = new ContactPoint
             {
                 EntityA = entity,
-                EntityB = targetEntity
+                EntityB = targetEntity,
+                Position = hitPosition
             };
 
             Contacts.Enqueue(contact);
