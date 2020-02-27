@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 using Unity.Mathematics;
+using UnityEngine;
 
 public static class FABRIKSolver
 {
@@ -42,14 +43,8 @@ public class FABRIKSystem : JobComponentSystem
     {
         const float k_BoneLength = 1.0f;
 
-        public void ComputeWorldChain(NativeArray<float3> chainCopy, ref BlobArray<float3> restPos, int startIndex, int length)
-        {
-            for (int i = 1; i < length; i++)
-            {
-                float3 newPos = chainCopy[i - 1] + restPos[startIndex + i];
-                chainCopy[i] = newPos;
-            }
-        }
+        [NativeDisableParallelForRestriction]
+        public ComponentDataFromEntity<Rotation> Rotations;
 
         public void Execute(DynamicBuffer<JointEntity> joints, ref SkeletonReference skeletonRef, ref Translation position, ref IKTarget target)
         {
@@ -59,17 +54,44 @@ public class FABRIKSystem : JobComponentSystem
 
             int length = chain.EndIndex - chain.StartIndex;
             var chainCopy = new NativeArray<float3>(length+1, Allocator.Temp);
-            ComputeWorldChain(chainCopy, ref restPos, chain.StartIndex, length);
+            for (int i = 1; i < length; i++)
+            {
+                float3 newPos = restPos[chain.StartIndex + i];
+                chainCopy[i] = newPos;
+            }
 
-            FABRIKSolver.Solve(chainCopy, k_BoneLength, position.Value, target.Target, float3.zero);
+            float3 localTarget = target.Target - position.Value;
+
+            FABRIKSolver.Solve(chainCopy, k_BoneLength, float3.zero, localTarget, float3.zero);
+
+            quaternion parentLocalRotation = quaternion.identity;
+            for (int i = 0; i < length-1; i++)
+            {
+                float3 pos = chainCopy[i];
+                float3 child = chainCopy[i + 1];
+
+                float3 objectSpaceDirection = child - pos;
+
+                quaternion objectSpaceRotation = Quaternion.FromToRotation(math.up(), objectSpaceDirection);
+                quaternion localRotation = math.mul(math.inverse(parentLocalRotation), objectSpaceRotation);
+
+                Entity jointEntity = joints[i].Value;
+                Rotations[jointEntity] = new Rotation { Value = localRotation };
+
+                parentLocalRotation = localRotation;
+            }
+
             chainCopy.Dispose();
         }
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+        var rotations = GetComponentDataFromEntity<Rotation>(false);
+
         var job = new FABRIKJob
         {
+            Rotations = rotations
         };
 
         return job.Schedule(this, inputDependencies);
