@@ -15,6 +15,7 @@ public class ProcessCollisionSystem : JobComponentSystem
     {
         public NativeQueue<ContactPoint> Contacts;
         public ComponentDataFromEntity<Velocity> Velocities;
+        public ComponentDataFromEntity<Mass> Masses;
         public EntityCommandBuffer EntityCommandBuffer;
 
         public void Execute()
@@ -30,8 +31,8 @@ public class ProcessCollisionSystem : JobComponentSystem
                 float3 velB = velBComp.Value;
 
                 // TODO: take mass into account
-                float massA = 1.0f;
-                float massB = 0.4f;
+                float massA = Masses[contact.EntityA].Value;
+                float massB = Masses[contact.EntityB].Value;
                 float restitution = 0.9f;
 
                 float mult = restitution / (massA + massB);
@@ -61,10 +62,13 @@ public class ProcessCollisionSystem : JobComponentSystem
         var ecb = m_EntityCommandBufferSystem.CreateCommandBuffer();
 
         var velocities = GetComponentDataFromEntity<Velocity>(false);
+        var masses = GetComponentDataFromEntity<Mass>(false);
+
         var job = new ProcessCollisionJob
         {
             Contacts = DetectCollisionSystem.Contacts,
             Velocities = velocities,
+            Masses = masses,
             EntityCommandBuffer = ecb
         };
 
