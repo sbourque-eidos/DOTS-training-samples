@@ -79,8 +79,8 @@ public class ArmStateSystem : SystemBase
                         state.CurrentState = ArmStateData.State.RequestingBallTargeting;
                         ecb.AddComponent(entityInQueryIndex, target.Value, new Velocity { Value = new float3(0.0f, 4.0f, 4.0f) });
                         ecb.AddComponent<FreeFalling>(entityInQueryIndex, target.Value);
-                        ecb.SetComponent(entityInQueryIndex, target.Value, new KillableData() { TargetKillPlane = groundEntity });
-                        ecb.AddComponent<TargetingCanTag>(entityInQueryIndex, entity);
+                        ecb.AddComponent(entityInQueryIndex, target.Value, new KillableData() { TargetKillPlane = groundEntity });
+                        //ecb.AddComponent<TargetingCanTag>(entityInQueryIndex, entity);
                         ecb.RemoveComponent<Target>(entityInQueryIndex, entity);
                     }
                     break;

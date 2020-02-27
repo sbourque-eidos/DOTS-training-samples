@@ -88,8 +88,8 @@ public class ReserveBallSystem : SystemBase
                     var ballPosition = translations[ballEntity];
                     if (math.abs(translation.Value.x - ballPosition.Value.x) <= k_MaximumDistance)
                     {
-                        intendedBallsParallel.TryAdd(ballEntity, entity);
-                        return;
+                        if (intendedBallsParallel.TryAdd(ballEntity, entity))
+                            return;
                     }
                 }
             }
@@ -110,6 +110,7 @@ public class ReserveBallSystem : SystemBase
                 var armEntity = arms[i];
                
                 ecb.AddComponent<TargetedTag>(ballEntity);
+                ecb.RemoveComponent<KillableData>(ballEntity);
                 ecb.AddComponent(armEntity, new Target { Value = ballEntity });
                 ecb.RemoveComponent<TargetingBallTag>(armEntity);
 
