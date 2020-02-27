@@ -73,7 +73,7 @@ public class ReserveCanSystem : SystemBase
         var intentionHandle = Entities
             .WithReadOnly(sortedCans)
             .WithAll<TargetingCanTag>()
-            .WithNone<Target>()
+            .WithNone<TargetCan>()
             .ForEach((Entity entity, in Translation translation) =>
         {
             var minPosition = translation.Value.x - k_MaximumDistance;
@@ -115,7 +115,7 @@ public class ReserveCanSystem : SystemBase
                
                 ecb.AddComponent<TargetedTag>(canEntity);
                 ecb.RemoveComponent<KillableData>(canEntity);
-                ecb.AddComponent(armEntity, new Target { Value = canEntity });
+                ecb.AddComponent(armEntity, new TargetCan { Value = canEntity });
                 ecb.RemoveComponent<TargetingCanTag>(armEntity);
 
             }

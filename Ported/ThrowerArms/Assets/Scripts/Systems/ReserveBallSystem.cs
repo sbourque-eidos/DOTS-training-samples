@@ -74,7 +74,7 @@ public class ReserveBallSystem : SystemBase
             .WithReadOnly(sortedBalls)
             .WithReadOnly(translations)
             .WithAll<TargetingBallTag>()
-            .WithNone<Target>()
+            .WithNone<TargetBall>()
             .ForEach((Entity entity, in Translation translation) =>
         {
             var minPosition = translation.Value.x - k_MaximumDistance;
@@ -112,7 +112,7 @@ public class ReserveBallSystem : SystemBase
                
                 ecb.AddComponent<TargetedTag>(ballEntity);
                 ecb.RemoveComponent<KillableData>(ballEntity);
-                ecb.AddComponent(armEntity, new Target { Value = ballEntity });
+                ecb.AddComponent(armEntity, new TargetBall { Value = ballEntity });
                 ecb.RemoveComponent<TargetingBallTag>(armEntity);
 
             }
