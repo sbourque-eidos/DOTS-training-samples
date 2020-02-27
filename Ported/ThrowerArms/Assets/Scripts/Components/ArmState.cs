@@ -18,6 +18,7 @@ public struct ArmStateData : IComponentData
 {
     public enum State
     {
+        RequestingBallTargeting,
         TargetingBall,
         PickingUp,
         WindingUp,
@@ -26,4 +27,5 @@ public struct ArmStateData : IComponentData
     }
 
     public State CurrentState;
+    public float Cooldown;
 }
