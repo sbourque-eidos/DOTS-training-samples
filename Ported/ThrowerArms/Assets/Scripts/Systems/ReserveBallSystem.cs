@@ -56,6 +56,7 @@ public class ReserveBallSystem : SystemBase
             .WithNone<FreeFalling>()
             .WithNone<Parent>()
             .WithNone<TargetedTag>()
+            .WithNone<IncreaseScaleData>()
             .ForEach((Entity entity, in Translation translation, in Velocity velocity) =>
         {
             var anticipatedPosition = translation.Value.x + velocity.Value.x * k_AnticipateTime;
@@ -77,7 +78,7 @@ public class ReserveBallSystem : SystemBase
             .ForEach((Entity entity, in Translation translation) =>
         {
             var minPosition = translation.Value.x - k_MaximumDistance;
-            var maxPosition = translation.Value.x - k_MaximumDistance;
+            var maxPosition = translation.Value.x + k_MaximumDistance;
             var min = (int)minPosition;
             var max = (int)(maxPosition + 0.5f);
 

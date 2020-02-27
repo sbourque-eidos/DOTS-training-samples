@@ -56,6 +56,7 @@ public class ReserveCanSystem : SystemBase
             .WithNone<FreeFalling>()
             .WithNone<Parent>()
             .WithNone<TargetedTag>()
+            .WithNone<IncreaseScaleData>()
             .ForEach((Entity entity, in Translation translation, in Velocity velocity) =>
         {
             var key = (int)translation.Value.x;
@@ -76,7 +77,7 @@ public class ReserveCanSystem : SystemBase
             .ForEach((Entity entity, in Translation translation) =>
         {
             var minPosition = translation.Value.x - k_MaximumDistance;
-            var maxPosition = translation.Value.x - k_MaximumDistance;
+            var maxPosition = translation.Value.x + k_MaximumDistance;
             var min = (int)minPosition;
             var max = (int)(maxPosition + 0.5f);
 
