@@ -34,10 +34,12 @@ public class ArmStateSystem : SystemBase
     {
         var ecb = m_EcbSystem.CreateCommandBuffer().ToConcurrent();
 
-        //var targetingBallTagData = GetComponentDataFromEntity<TargetingBallTag>(isReadOnly: true);
-        //var targetingCanTagData = GetComponentDataFromEntity<TargetingCanTag>(isReadOnly: true);
-        var targetData = GetComponentDataFromEntity<Target>(isReadOnly: true);
+        var targetBallData = GetComponentDataFromEntity<TargetBall>(isReadOnly: true);
+        var targetCanData = GetComponentDataFromEntity<TargetCan>(isReadOnly: true);
         var translationData = GetComponentDataFromEntity<Translation>();
+
+        var velocityData = GetComponentDataFromEntity<Velocity>(isReadOnly: true);
+        var localToWorldData = GetComponentDataFromEntity<LocalToWorld>(isReadOnly: true);
 
         var groundEntity = GetSingletonEntity<Ground>();
         var dt = Time.DeltaTime;
@@ -51,9 +53,9 @@ public class ArmStateSystem : SystemBase
                     state.CurrentState = ArmStateData.State.TargetingBall;
                     break;
                 case ArmStateData.State.TargetingBall:
-                    if (targetData.Exists(entity))
+                    if (targetBallData.Exists(entity))
                     {
-                        Target target = targetData[entity];
+                        TargetBall target = targetBallData[entity];
 
                         state.CurrentState = ArmStateData.State.PickingUp;
                         state.Cooldown = 2.0f;
@@ -65,34 +67,60 @@ public class ArmStateSystem : SystemBase
                     state.Cooldown -= dt;
                     if (state.Cooldown <= 0.0f)
                     {
-                        Target target = targetData[entity];
-                        state.CurrentState = ArmStateData.State.WindingUp;
+                        //TargetBall target = targetBallData[entity];
+                        state.CurrentState = ArmStateData.State.TargetingCan;
+                        ecb.AddComponent<TargetingCanTag>(entityInQueryIndex, entity);
+                    }
+                    break;
+                case ArmStateData.State.TargetingCan:
+                    if (targetCanData.Exists(entity))
+                    {
+                        TargetBall target = targetBallData[entity];
+                        //ecb.AddComponent(entityInQueryIndex, target.Value, new Velocity { Value = new float3(0.0f, 4.0f, 4.0f) });
+                        //ecb.AddComponent<FreeFalling>(entityInQueryIndex, target.Value);
+                        //ecb.AddComponent(entityInQueryIndex, target.Value, new KillableData() { TargetKillPlane = groundEntity });
                         state.Cooldown = 2.0f;
                         translationData[target.Value] = new Translation { Value = transform.Position + new float3(0.0f, 2.0f, 0.0f) };
+                        state.CurrentState = ArmStateData.State.WindingUp;
                     }
                     break;
                 case ArmStateData.State.WindingUp:
                     state.Cooldown -= dt;
                     if (state.Cooldown <= 0.0f)
                     {
-                        Target target = targetData[entity];
-                        state.CurrentState = ArmStateData.State.RequestingBallTargeting;
-                        ecb.AddComponent(entityInQueryIndex, target.Value, new Velocity { Value = new float3(0.0f, 4.0f, 4.0f) });
-                        ecb.AddComponent<FreeFalling>(entityInQueryIndex, target.Value);
-                        ecb.AddComponent(entityInQueryIndex, target.Value, new KillableData() { TargetKillPlane = groundEntity });
+                        //Target target = targetData[entity];
+                        state.CurrentState = ArmStateData.State.Throwing;
+
                         //ecb.AddComponent<TargetingCanTag>(entityInQueryIndex, entity);
-                        ecb.RemoveComponent<Target>(entityInQueryIndex, entity);
+                        //ecb.RemoveComponent<Target>(entityInQueryIndex, entity);
                     }
                     break;
-                case ArmStateData.State.TargetingCan:
-                    break;
                 case ArmStateData.State.Throwing:
+                    TargetBall ball = targetBallData[entity];
+                    TargetCan can = targetCanData[entity];
+                    ecb.AddComponent(entityInQueryIndex, can.Value, new Target { Value = ball.Value });
+
+                    float3 canPosition = localToWorldData[can.Value].Position;
+                    float3 canVelocity = velocityData[can.Value].Value;
+
+                    float3 ballPosition = localToWorldData[ball.Value].Position;
+                    float3 ballVelocity = CurveSolver.Solve(canPosition, canVelocity, ballPosition, 1.0f);
+
+                    ecb.AddComponent(entityInQueryIndex, ball.Value, new Velocity { Value = ballVelocity });
+                    ecb.AddComponent<FreeFalling>(entityInQueryIndex, ball.Value);
+                    ecb.RemoveComponent<TargetBall>(entityInQueryIndex, entity);
+                    ecb.RemoveComponent<TargetCan>(entityInQueryIndex, entity);
+                    ecb.AddComponent(entityInQueryIndex, ball.Value, new KillableData { TargetKillPlane = groundEntity });
+                    ecb.AddComponent(entityInQueryIndex, can.Value, new KillableData { TargetKillPlane = groundEntity });
+
+                    state.CurrentState = ArmStateData.State.RequestingBallTargeting;
                     break;
             }
         })
-        //.WithReadOnly(targetingBallTagData)
-        //.WithReadOnly(targetingCanTagData)
-        .WithReadOnly(targetData)
+        .WithReadOnly(targetBallData)
+        .WithReadOnly(targetCanData)
+        .WithReadOnly(velocityData)
+        .WithReadOnly(localToWorldData)
         .WithNativeDisableParallelForRestriction(translationData)
         .ScheduleParallel(Dependency);
 
