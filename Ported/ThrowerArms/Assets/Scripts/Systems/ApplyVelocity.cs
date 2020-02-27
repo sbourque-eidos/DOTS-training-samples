@@ -3,6 +3,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 using Unity.Burst;
+using Unity.Mathematics;
 
 [BurstCompile]
 public struct ApplyVelocityJob : IJobForEach<Translation, Velocity>
@@ -12,6 +13,18 @@ public struct ApplyVelocityJob : IJobForEach<Translation, Velocity>
     public void Execute(ref Translation translation, ref Velocity velocity)
     {
         translation.Value += velocity.Value * DeltaTime;
+    }
+}
+
+[BurstCompile]
+public struct ApplyAngularVelocityJob : IJobForEach<Rotation, AngularVelocity>
+{
+    public float DeltaTime;
+
+    public void Execute(ref Rotation rotation, ref AngularVelocity velocity)
+    {
+        quaternion offsetRot = quaternion.Euler(velocity.Value * DeltaTime);
+        rotation.Value = math.mul(rotation.Value, offsetRot);
     }
 }
 
@@ -25,7 +38,14 @@ public class ApplyVelocitySystem : JobComponentSystem
             DeltaTime = Time.DeltaTime
         };
 
+        var applyAngularVelocity = new ApplyAngularVelocityJob
+        {
+            DeltaTime = Time.DeltaTime
+        };
+
         JobHandle handle = applyVelocityJob.Schedule(this, inputDeps);
-        return handle;
+        JobHandle handleAngular = applyAngularVelocity.Schedule(this, inputDeps);
+
+        return JobHandle.CombineDependencies(handle, handleAngular);
     }
 }

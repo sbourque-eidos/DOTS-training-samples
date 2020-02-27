@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Transforms;
 
 [UpdateAfter(typeof(DetectCollisionSystem))]
 public class ProcessCollisionSystem : JobComponentSystem
@@ -15,7 +16,10 @@ public class ProcessCollisionSystem : JobComponentSystem
     {
         public NativeQueue<ContactPoint> Contacts;
         public ComponentDataFromEntity<Velocity> Velocities;
+        [ReadOnly] public ComponentDataFromEntity<Translation> Positions;
+
         public EntityCommandBuffer EntityCommandBuffer;
+        const float hollywoodFactor = 5.0f;
 
         public void Execute()
         {
@@ -43,7 +47,14 @@ public class ProcessCollisionSystem : JobComponentSystem
                 Velocities[contact.EntityA] = velAComp;
                 Velocities[contact.EntityB] = velBComp;
 
+                float3 arm = Positions[contact.EntityB].Value - contact.Position;
+                float3 torque = math.cross(velA, arm);
+
+                float3 angVel = hollywoodFactor * torque;
+                var angularVelocity = new AngularVelocity { Value = angVel };
+
                 EntityCommandBuffer.AddComponent<FreeFalling>(contact.EntityB);
+                EntityCommandBuffer.AddComponent(contact.EntityB, angularVelocity);
                 EntityCommandBuffer.RemoveComponent<Target>(contact.EntityA);
             }
         }
@@ -61,10 +72,12 @@ public class ProcessCollisionSystem : JobComponentSystem
         var ecb = m_EntityCommandBufferSystem.CreateCommandBuffer();
 
         var velocities = GetComponentDataFromEntity<Velocity>(false);
+        var positions = GetComponentDataFromEntity<Translation>(true);
         var job = new ProcessCollisionJob
         {
             Contacts = DetectCollisionSystem.Contacts,
             Velocities = velocities,
+            Positions = positions,
             EntityCommandBuffer = ecb
         };
 
