@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4003422728916270}
   - component: {fileID: 114522796547406984}
+  - component: {fileID: 1668963015336295265}
   m_Layer: 0
   m_Name: Arm
   m_TagString: Untagged
@@ -117,6 +118,19 @@ MonoBehaviour:
   targetXRange: 15
   material: {fileID: 2100000, guid: b998c5af23f4ade4a94568cc7bb3bff6, type: 2}
   boneMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1668963015336295265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092234786245138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349974e632f5c4b9eb301deaaa70973c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InitialState: 0
 --- !u!1 &1819665481261581016
 GameObject:
   m_ObjectHideFlags: 0
