@@ -82,13 +82,14 @@ public class ArmData : MonoBehaviour, IConvertGameObjectToEntity
 	        typeof(Parent)
 		};
 
-		EntityArchetype armAchetype = dstManager.CreateArchetype(componentTypes);
 		const int segmentCount = 3;
 
 		BlobAssetReference<Skeleton> skeletonRef = SkeletonAssetBuilder.BuildSkeleton();
 		var skeletonRefComponent = new SkeletonReference { skeleton = skeletonRef };
 
-		dstManager.AddComponentData(entity, new Translation());
+		var comps = new ComponentTypes(componentTypes);
+		dstManager.AddComponents(entity, comps);
+
 		dstManager.AddComponentData(entity, skeletonRefComponent);
 
 		var joints = new NativeArray<Entity>(segmentCount + 1, Allocator.Temp);
