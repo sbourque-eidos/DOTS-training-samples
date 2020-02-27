@@ -2,7 +2,6 @@
 using Unity.Transforms;
 
 [UpdateBefore(typeof(DetectCollisionSystem))]
-[UpdateBefore(typeof(KillableSystem))]
 public class ScaleColliderSystem : SystemBase
 {
     protected override void OnUpdate()

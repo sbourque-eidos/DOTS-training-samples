@@ -2,13 +2,14 @@
 using Unity.Transforms;
 using Unity.Jobs;
 
+[UpdateInGroup(typeof(InitializationSystemGroup))]
 public class KillableSystem : SystemBase
 {
     EntityCommandBufferSystem m_EcbSystem;
 
     protected override void OnCreate()
     {
-        m_EcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        m_EcbSystem = World.GetOrCreateSystem<EndInitializationEntityCommandBufferSystem>();
     }
 
     protected override void OnUpdate()

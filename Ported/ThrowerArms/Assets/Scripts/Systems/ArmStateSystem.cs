@@ -66,10 +66,9 @@ public class ArmStateSystem : SystemBase
                     if (state.Cooldown <= 0.0f)
                     {
                         Target target = targetData[entity];
-
                         state.CurrentState = ArmStateData.State.WindingUp;
                         state.Cooldown = 2.0f;
-                        translationData[target.Value] = new Translation { Value = transform.Position + new float3(0.0f,2.0f,0.0f) };
+                        translationData[target.Value] = new Translation { Value = transform.Position + new float3(0.0f, 2.0f, 0.0f) };
                     }
                     break;
                 case ArmStateData.State.WindingUp:
