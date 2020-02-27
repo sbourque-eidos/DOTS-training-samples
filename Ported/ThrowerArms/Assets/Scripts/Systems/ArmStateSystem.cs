@@ -67,7 +67,6 @@ public class ArmStateSystem : SystemBase
                     state.Cooldown -= dt;
                     if (state.Cooldown <= 0.0f)
                     {
-                        //TargetBall target = targetBallData[entity];
                         state.CurrentState = ArmStateData.State.TargetingCan;
                         ecb.AddComponent<TargetingCanTag>(entityInQueryIndex, entity);
                     }
@@ -76,9 +75,6 @@ public class ArmStateSystem : SystemBase
                     if (targetCanData.Exists(entity))
                     {
                         TargetBall target = targetBallData[entity];
-                        //ecb.AddComponent(entityInQueryIndex, target.Value, new Velocity { Value = new float3(0.0f, 4.0f, 4.0f) });
-                        //ecb.AddComponent<FreeFalling>(entityInQueryIndex, target.Value);
-                        //ecb.AddComponent(entityInQueryIndex, target.Value, new KillableData() { TargetKillPlane = groundEntity });
                         state.Cooldown = 2.0f;
                         translationData[target.Value] = new Translation { Value = transform.Position + new float3(0.0f, 2.0f, 0.0f) };
                         state.CurrentState = ArmStateData.State.WindingUp;
@@ -88,17 +84,13 @@ public class ArmStateSystem : SystemBase
                     state.Cooldown -= dt;
                     if (state.Cooldown <= 0.0f)
                     {
-                        //Target target = targetData[entity];
                         state.CurrentState = ArmStateData.State.Throwing;
-
-                        //ecb.AddComponent<TargetingCanTag>(entityInQueryIndex, entity);
-                        //ecb.RemoveComponent<Target>(entityInQueryIndex, entity);
                     }
                     break;
                 case ArmStateData.State.Throwing:
                     TargetBall ball = targetBallData[entity];
                     TargetCan can = targetCanData[entity];
-                    ecb.AddComponent(entityInQueryIndex, can.Value, new Target { Value = ball.Value });
+                    ecb.AddComponent(entityInQueryIndex, ball.Value, new Target { Value = can.Value });
 
                     float3 canPosition = localToWorldData[can.Value].Position;
                     float3 canVelocity = velocityData[can.Value].Value;

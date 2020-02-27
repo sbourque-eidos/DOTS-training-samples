@@ -710,7 +710,7 @@ MonoBehaviour:
   SpawnArea: {fileID: 1901327738}
   DeathPlane: {fileID: 894746156}
   Speed: -1
-  TargetCount: 200
+  TargetCount: 100
   MinScale:
     x: 0.3
     y: 0.3
