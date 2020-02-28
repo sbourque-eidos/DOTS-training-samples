@@ -8,11 +8,14 @@ using Unity.Mathematics;
 [UpdateAfter(typeof(DetectCollisionSystem))]
 public class ProcessCollisionSystem : JobComponentSystem
 {
+    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
+    
     [BurstCompile]
     struct ProcessCollisionJob : IJob
     {
         public NativeQueue<ContactPoint> Contacts;
         public ComponentDataFromEntity<Velocity> Velocities;
+        public EntityCommandBuffer EntityCommandBuffer;
 
         public void Execute()
         {
@@ -28,7 +31,7 @@ public class ProcessCollisionSystem : JobComponentSystem
 
                 // TODO: take mass into account
                 float massA = 1.0f;
-                float massB = 1.0f;
+                float massB = 0.4f;
                 float restitution = 0.9f;
 
                 float mult = restitution / (massA + massB);
@@ -39,20 +42,37 @@ public class ProcessCollisionSystem : JobComponentSystem
 
                 Velocities[contact.EntityA] = velAComp;
                 Velocities[contact.EntityB] = velBComp;
+
+                EntityCommandBuffer.AddComponent<FreeFalling>(contact.EntityB);
+                EntityCommandBuffer.RemoveComponent<Target>(contact.EntityA);
             }
         }
     }
-    
+
+    protected override void OnCreate()
+    {
+        base.OnCreate();
+
+        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+    }
+
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+        var ecb = m_EntityCommandBufferSystem.CreateCommandBuffer();
+
         var velocities = GetComponentDataFromEntity<Velocity>(false);
         var job = new ProcessCollisionJob
         {
             Contacts = DetectCollisionSystem.Contacts,
-            Velocities = velocities
+            Velocities = velocities,
+            EntityCommandBuffer = ecb
         };
 
         JobHandle handle = JobHandle.CombineDependencies(inputDependencies, DetectCollisionSystem.Handle);
-        return job.Schedule(handle);
+        handle = job.Schedule(handle);
+
+        m_EntityCommandBufferSystem.AddJobHandleForProducer(handle);
+
+        return handle;
     }
 }

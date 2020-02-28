@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 public static class CurveSolver
 {
-    public static float3 Gravity = new float3(0.0f, -9.81f, 0.0f);
+    public readonly static float3 Gravity = new float3(0.0f, -9.81f, 0.0f);
 
     public static float3 Solve(float3 posInitTarget, float3 velTarget, float3 startPosition, float time)
     {
