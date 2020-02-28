@@ -115,7 +115,7 @@ public class FABRIKSystem : JobComponentSystem
         };
 
 
-        JobHandle timerHandle = timerJob.Schedule(this, inputDependencies);
-        return job.Schedule(this, timerHandle);
+        //JobHandle timerHandle = timerJob.Schedule(this, inputDependencies);
+        return default; // job.Schedule(this, timerHandle);
     }
 }
