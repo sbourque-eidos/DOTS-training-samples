@@ -13,8 +13,6 @@ public class ArmAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 	public float maxReachLength;
 	public float reachDuration;
 	public float maxHandSpeed;
-	[Range(0f,1f)]
-	public float grabTimerSmooth;
 	[Space(10)]
 	public float[] fingerBoneLengths;
 	public float[] fingerThicknesses;
@@ -35,36 +33,8 @@ public class ArmAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 	[Space(10)]
 	public Material material;
 	public Mesh boneMesh;
-
-	Rock intendedRock;
-	Rock heldRock;
-	TinCan targetCan;
-
-	Vector3[] armChain;
-	Vector3[][] fingerChains;
-	Vector3[] thumbChain;
-	Matrix4x4[] matrices;
-	Vector3 handTarget;
-
-	Vector3 handForward;
-	Vector3 handUp;
-	Vector3 handRight;
-	Matrix4x4 handMatrix;
-
-	Vector3 grabHandTarget;
-	Vector3 lastIntendedRockPos;
-	float lastIntendedRockSize;
-	Vector3 windupHandTarget;
-	Vector3 heldRockOffset;
-	Vector3 aimVector;
-	float reachTimer;
-	float windupTimer;
-	float throwTimer;
-	float timeOffset;
    
 	static readonly float3 k_Right = new float3(1.0f, 0.0f, 0.0f);
-
-
 
 	void IConvertGameObjectToEntity.Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
 	{
