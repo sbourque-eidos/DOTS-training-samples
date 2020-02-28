@@ -72,21 +72,29 @@ public class ProcessCollisionSystem : JobComponentSystem
     {
         var ecb = m_EntityCommandBufferSystem.CreateCommandBuffer();
 
+        var contactsQueue = DetectCollisionSystem.Contacts;
+
+        JobHandle handle = JobHandle.CombineDependencies(inputDependencies, DetectCollisionSystem.Handle);
+        var uiJobHandle = Entities.WithReadOnly(contactsQueue)
+            .ForEach((ref UIData uiData) =>
+        {
+            uiData.ballHits += contactsQueue.Count;
+        }).Schedule(handle);
+
         var velocities = GetComponentDataFromEntity<Velocity>(false);
         var masses = GetComponentDataFromEntity<Mass>(false);
 
         var positions = GetComponentDataFromEntity<Translation>(true);
         var job = new ProcessCollisionJob
         {
-            Contacts = DetectCollisionSystem.Contacts,
+            Contacts = contactsQueue,
             Velocities = velocities,
             Masses = masses,
             Positions = positions,
             EntityCommandBuffer = ecb
         };
 
-        JobHandle handle = JobHandle.CombineDependencies(inputDependencies, DetectCollisionSystem.Handle);
-        handle = job.Schedule(handle);
+        handle = job.Schedule(uiJobHandle);
 
         m_EntityCommandBufferSystem.AddJobHandleForProducer(handle);
 

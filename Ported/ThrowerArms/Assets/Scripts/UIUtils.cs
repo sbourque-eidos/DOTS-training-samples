@@ -24,8 +24,10 @@ public class UIUtils : MonoBehaviour
     {
         if (m_Group.IsCreated)
         {
-            uiText.text = "Can count:" + m_Group.GetSingleton<UIData>().canCount.ToString()
-                + "\nBall count:" + m_Group.GetSingleton<UIData>().ballCount.ToString();
+            var uiData = m_Group.GetSingleton<UIData>();
+            uiText.text = "Can count:" + uiData.canCount.ToString()
+                + "\nBall count:" + uiData.ballCount.ToString()
+                + "\nBall hits:" + uiData.ballHits.ToString();
         }
     }
 }

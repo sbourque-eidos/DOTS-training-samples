@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(PresentationSystemGroup))]
 public class UISystem : SystemBase
 {
     private EntityQuery m_cylindersQuery;
@@ -29,6 +30,8 @@ public class UISystem : SystemBase
         var uiData = GetSingleton<UIData>();
         var canCount = m_cylindersQuery.CalculateEntityCount();
         var ballCount = m_ballQuery.CalculateEntityCount();
+
+        var ballHits = DetectCollisionSystem.Contacts.Count;
 
         uiData.canCount.CopyFrom(canCount.ToString());
         uiData.ballCount.CopyFrom(ballCount.ToString());

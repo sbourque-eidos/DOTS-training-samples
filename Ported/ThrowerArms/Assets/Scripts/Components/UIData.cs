@@ -8,5 +8,5 @@ public struct UIData : IComponentData
 {
     public NativeString64 canCount;
     public NativeString64 ballCount;
-
+    public int ballHits;
 }
