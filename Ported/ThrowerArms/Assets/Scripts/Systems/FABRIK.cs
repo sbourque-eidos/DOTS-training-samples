@@ -39,6 +39,19 @@ public static class FABRIKSolver
 public class FABRIKSystem : JobComponentSystem
 {
     [BurstCompile]
+    struct UpdateTargetJob : IJobForEach<IKTarget>
+    {
+        public float DeltaTime;
+        public void Execute(ref IKTarget target)
+        {
+            float remainingTime = target.Timer - target.CurrentTime;
+
+            target.PercentageOfRemainingForFrame = DeltaTime / remainingTime;
+            target.CurrentTime += DeltaTime;
+        }
+    }
+
+    [BurstCompile]
     struct FABRIKJob : IJobForEach_BCCC<JointEntity, SkeletonReference, Translation, IKTarget>
     {
         const float k_BoneLength = 1.0f;
@@ -60,7 +73,9 @@ public class FABRIKSystem : JobComponentSystem
                 chainCopy[i] = newPos;
             }
 
-            float3 localTarget = target.Target - position.Value;
+            float3 remainingPath = target.Target - position.Value;
+            float3 worldTarget = position.Value + target.PercentageOfRemainingForFrame * remainingPath;
+            float3 localTarget = worldTarget - position.Value;
 
             FABRIKSolver.Solve(chainCopy, k_BoneLength, float3.zero, localTarget, float3.zero);
 

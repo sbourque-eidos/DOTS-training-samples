@@ -11,6 +11,9 @@ public struct JointEntity : IBufferElementData
 public struct IKTarget : IComponentData
 {
     public float3 Target;
+    public float Timer;
+    public float CurrentTime;
+    public float PercentageOfRemainingForFrame;
 }
 
 public struct IKChain

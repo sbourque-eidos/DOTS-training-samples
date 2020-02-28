@@ -61,6 +61,15 @@ public class ArmStateSystem : SystemBase
                         state.Cooldown = 2.0f;
                         translationData[target.Value] = new Translation { Value = transform.Position };
                         ecb.RemoveComponent<Velocity>(entityInQueryIndex, target.Value);
+
+                        var targetIK = new IKTarget
+                        {
+                            Target = transform.Position,
+                            Timer = state.Cooldown,
+                            CurrentTime = 0.0f
+                        };
+
+                        ecb.AddComponent<IKTarget>(0, entity, targetIK);
                     }
                     break;
                 case ArmStateData.State.PickingUp:
@@ -76,8 +85,19 @@ public class ArmStateSystem : SystemBase
                     {
                         TargetBall target = targetBallData[entity];
                         state.Cooldown = 2.0f;
-                        translationData[target.Value] = new Translation { Value = transform.Position + new float3(0.0f, 2.0f, 0.0f) };
+
+                        float3 newPosition = transform.Position + new float3(0.0f, 2.0f, 0.0f);
+                        translationData[target.Value] = new Translation { Value = newPosition };
                         state.CurrentState = ArmStateData.State.WindingUp;
+
+                        var targetIK = new IKTarget
+                        {
+                            Target = transform.Position,
+                            Timer = state.Cooldown,
+                            CurrentTime = 0.0f
+                        };
+
+                        ecb.SetComponent<IKTarget>(0, entity, targetIK);
                     }
                     break;
                 case ArmStateData.State.WindingUp:
@@ -86,6 +106,7 @@ public class ArmStateSystem : SystemBase
                     {
                         state.CurrentState = ArmStateData.State.Throwing;
                     }
+                    ecb.RemoveComponent<IKTarget>(0, entity);
                     break;
                 case ArmStateData.State.Throwing:
                     TargetBall ball = targetBallData[entity];
