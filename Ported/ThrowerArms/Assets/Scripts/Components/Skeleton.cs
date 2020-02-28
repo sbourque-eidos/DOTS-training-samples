@@ -38,16 +38,16 @@ public struct SkeletonReference : IComponentData
 
 public static class SkeletonAssetBuilder
 {
-    public static BlobAssetReference<Skeleton> BuildSkeleton()
+    public static BlobAssetReference<Skeleton> BuildSkeleton(float boneLength)
     {
         var blobBuilder = new BlobBuilder(Allocator.Temp);
         ref var skeleton = ref blobBuilder.ConstructRoot<Skeleton>();
 
         var nodearray = blobBuilder.Allocate(ref skeleton.Transforms, 3);
 
-        nodearray[0] = new float3(0.0f, 0.1f, 0.0f);
-        nodearray[1] = new float3(0.0f, 0.1f, 0.0f);
-        nodearray[2] = new float3(0.0f, 0.1f, 0.0f);
+        nodearray[0] = new float3(0.0f, boneLength, 0.0f);
+        nodearray[1] = new float3(0.0f, boneLength, 0.0f);
+        nodearray[2] = new float3(0.0f, boneLength, 0.0f);
 
         return blobBuilder.CreateBlobAssetReference<Skeleton>(Allocator.Persistent);
     }

@@ -7,30 +7,14 @@ using Unity.Collections;
 
 public class ArmAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 {
-	public float armBoneLength;
-	public float armBoneThickness;
-	public float armBendStrength;
-	public float maxReachLength;
-	public float reachDuration;
-	public float maxHandSpeed;
-	[Space(10)]
-	public float[] fingerBoneLengths;
-	public float[] fingerThicknesses;
-	public float fingerXOffset;
-	public float fingerSpacing;
-	public float fingerBendStrength;
-	[Space(10)]
-	public float thumbBoneLength;
-	public float thumbThickness;
-	public float thumbBendStrength;
-	public float thumbXOffset;
-	[Space(10)]
-	public float windupDuration;
-	public float throwDuration;
-	public AnimationCurve throwCurve;
-	public float baseThrowSpeed;
-	public float targetXRange;
-	[Space(10)]
+	const float armBoneThickness = 0.1f;
+	const float armBendStrength = 0.0f;
+
+	public float armBoneLength = 1.0f;
+	public float reachDuration = 1.0f;
+	public float windupDuration = 1.0f;
+	public float throwDuration = 1.0f;
+
 	public Material material;
 	public Mesh boneMesh;
    
@@ -54,7 +38,7 @@ public class ArmAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 
 		const int segmentCount = 3;
 
-		BlobAssetReference<Skeleton> skeletonRef = SkeletonAssetBuilder.BuildSkeleton();
+		BlobAssetReference<Skeleton> skeletonRef = SkeletonAssetBuilder.BuildSkeleton(armBoneLength);
 		var skeletonRefComponent = new SkeletonReference { skeleton = skeletonRef };
 
 		var comps = new ComponentTypes(componentTypes);
