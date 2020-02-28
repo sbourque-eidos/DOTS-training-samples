@@ -104,11 +104,18 @@ public class FABRIKSystem : JobComponentSystem
     {
         var rotations = GetComponentDataFromEntity<Rotation>(false);
 
+        var timerJob = new UpdateTargetJob
+        {
+            DeltaTime = Time.DeltaTime
+        };
+
         var job = new FABRIKJob
         {
             Rotations = rotations
         };
 
-        return job.Schedule(this, inputDependencies);
+
+        JobHandle timerHandle = timerJob.Schedule(this, inputDependencies);
+        return job.Schedule(this, timerHandle);
     }
 }
