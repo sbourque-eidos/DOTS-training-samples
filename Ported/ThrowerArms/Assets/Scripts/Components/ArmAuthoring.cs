@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Collections;
 
-public class ArmData : MonoBehaviour, IConvertGameObjectToEntity
+public class ArmAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 {
 	public float armBoneLength;
 	public float armBoneThickness;
