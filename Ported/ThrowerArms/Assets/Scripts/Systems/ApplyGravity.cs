@@ -31,6 +31,8 @@ public struct ApplyGravitOnPositionJob : IJobForEach<Translation, FreeFalling>
     }
 }
 
+[UpdateBefore(typeof(ReserveBallSystem))]
+[UpdateBefore(typeof(ReserveCanSystem))]
 public class ApplyGravitySystem : JobComponentSystem
 {
     const float Gravity = -9.81f;

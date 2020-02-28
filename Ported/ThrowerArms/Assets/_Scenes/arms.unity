@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 864855528}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 111.41, y: -0, z: 0}
+  m_LocalPosition: {x: 464.6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1559498126}
@@ -683,7 +683,7 @@ Transform:
   m_GameObject: {fileID: 1389865690}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 49, y: 0, z: 0}
-  m_LocalScale: {x: 12, y: 1, z: 0.001}
+  m_LocalScale: {x: 60, y: 1, z: 0.001}
   m_Children: []
   m_Father: {fileID: 1559498126}
   m_RootOrder: 0
@@ -723,7 +723,7 @@ MonoBehaviour:
   SpawnArea: {fileID: 1389865690}
   DeathPlane: {fileID: 864855528}
   Speed: 1
-  TargetCount: 300
+  TargetCount: 20000
   MinScale:
     x: 0.2
     y: 0.2
@@ -967,7 +967,7 @@ MonoBehaviour:
   SpawnArea: {fileID: 1901327738}
   DeathPlane: {fileID: 894746156}
   Speed: -1
-  TargetCount: 100
+  TargetCount: 20000
   MinScale:
     x: 0.3
     y: 0.3
@@ -1211,7 +1211,7 @@ Transform:
   m_GameObject: {fileID: 1901327738}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 49.1, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 0.6}
+  m_LocalScale: {x: 50, y: 1, z: 0.6}
   m_Children: []
   m_Father: {fileID: 1865057441}
   m_RootOrder: 0
